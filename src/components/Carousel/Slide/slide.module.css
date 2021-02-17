@@ -1,9 +1,12 @@
 .imgWrapper {
-  position: relative;
+  margin: 0 auto;
+  max-width: 100%;
 }
 .responsiveHelper {
-  position: absolute;
+  position: relative;
+  padding-top: 50%;
 }
 .image {
-  max-width: 90%;
+  position: absolute;
+  max-width: 100%;
 }
