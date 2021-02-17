@@ -1,0 +1,9 @@
+.imgWrapper {
+  position: relative;
+}
+.responsiveHelper {
+  position: absolute;
+}
+.image {
+  max-width: 90%;
+}
