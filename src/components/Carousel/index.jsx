@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Slide from './Slide';
 import styles from './Carousel.module.css';
+import SlideShow from './SlideShow';
 
 class Carousel extends Component {
   constructor(props) {
@@ -27,8 +28,11 @@ class Carousel extends Component {
     this.setState({ currentSlide: this.nextIndex });
   };
 
-  startSlideShow = () => {
-    this.setState({ intervalId: setInterval(this.handleNextSlide, 2000) });
+  startSlideShow = (interval = 1) => {
+    const convertToMilliseconds = (seconds) => seconds * 1000;
+    this.setState({
+      intervalId: setInterval(this.handleNextSlide, convertToMilliseconds(interval)),
+    });
   };
 
   stopSlideShow = () => {
@@ -49,11 +53,10 @@ class Carousel extends Component {
           prevBtn={this.handlePrevSlide}
           nextBtn={this.handleNextSlide}
         />
-        {intervalId ? (
-          <button onClick={this.stopSlideShow}>Stop slideshow</button>
-        ) : (
-          <button onClick={this.startSlideShow}>Slideshow</button>
-        )}
+        <SlideShow
+          btnHandlers={[this.startSlideShow, this.stopSlideShow]}
+          intervalId={intervalId}
+        />
       </div>
     );
   }
