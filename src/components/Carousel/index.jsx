@@ -7,6 +7,7 @@ class Carousel extends Component {
     super(props);
     this.state = {
       currentSlide: 0,
+      intervalId: null,
     };
   }
   get nextIndex() {
@@ -19,15 +20,25 @@ class Carousel extends Component {
     const { imageDB } = this.props;
     return (currentSlide - 1 + imageDB.length) % imageDB.length;
   }
-  handleBtnPrev = () => {
+  handlePrevSlide = () => {
     this.setState({ currentSlide: this.prevIndex });
   };
-  handleBtnNext = () => {
+  handleNextSlide = () => {
     this.setState({ currentSlide: this.nextIndex });
   };
 
+  startSlideShow = () => {
+    this.setState({ intervalId: setInterval(this.handleNextSlide, 2000) });
+  };
+
+  stopSlideShow = () => {
+    const { intervalId } = this.state;
+    clearInterval(intervalId);
+    this.setState({ intervalId: null });
+  };
+
   render() {
-    const { currentSlide } = this.state;
+    const { currentSlide, intervalId } = this.state;
     const { image, title, description } = this.props.imageDB[currentSlide];
     return (
       <div className={styles.wrapper}>
@@ -35,9 +46,14 @@ class Carousel extends Component {
           image={image}
           title={title}
           description={description}
-          prevBtn={this.handleBtnPrev}
-          nextBtn={this.handleBtnNext}
+          prevBtn={this.handlePrevSlide}
+          nextBtn={this.handleNextSlide}
         />
+        {intervalId ? (
+          <button onClick={this.stopSlideShow}>Stop slideshow</button>
+        ) : (
+          <button onClick={this.startSlideShow}>Slideshow</button>
+        )}
       </div>
     );
   }
