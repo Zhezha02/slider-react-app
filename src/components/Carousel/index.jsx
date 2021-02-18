@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Slide from './Slide';
+import styles from './Carousel.module.css';
 
 class Carousel extends Component {
   constructor(props) {
@@ -9,33 +10,34 @@ class Carousel extends Component {
     };
   }
   get nextIndex() {
-    const{currentSlide} = this.state;
-    const{imageDB} = this.props;
-    console.log(imageDB);
+    const { currentSlide } = this.state;
+    const { imageDB } = this.props;
     return (currentSlide + 1) % imageDB.length;
   }
   get prevIndex() {
-    const{currentSlide} = this.state;
-    const{imageDB} = this.props;
+    const { currentSlide } = this.state;
+    const { imageDB } = this.props;
     return (currentSlide - 1 + imageDB.length) % imageDB.length;
   }
   handleBtnPrev = () => {
-    this.setState({currentSlide: this.prevIndex});
-    console.log(this.state);
-
+    this.setState({ currentSlide: this.prevIndex });
   };
   handleBtnNext = () => {
-    this.setState({currentSlide: this.nextIndex});
+    this.setState({ currentSlide: this.nextIndex });
   };
 
   render() {
-    const {currentSlide} = this.state;
+    const { currentSlide } = this.state;
     const { image, title, description } = this.props.imageDB[currentSlide];
     return (
-      <div>
-        <Slide image={image} title={title} description={description} />
-        <button onClick={this.handleBtnPrev}> {'<'} </button>
-        <button onClick={this.handleBtnNext}> {'>'} </button>
+      <div className={styles.wrapper}>
+        <Slide
+          image={image}
+          title={title}
+          description={description}
+          prevBtn={this.handleBtnPrev}
+          nextBtn={this.handleBtnNext}
+        />
       </div>
     );
   }
