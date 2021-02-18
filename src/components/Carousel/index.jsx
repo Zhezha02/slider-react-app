@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Slide from './Slide';
-import styles from './Carousel.module.css';
+import styles from './Carousel.module.scss';
 import SlideShow from './SlideShow';
+import PropTypes from 'prop-types';
 
 class Carousel extends Component {
   constructor(props) {
@@ -43,13 +44,11 @@ class Carousel extends Component {
 
   render() {
     const { currentSlide, intervalId } = this.state;
-    const { image, title, description } = this.props.imageDB[currentSlide];
+    const { imageDB } = this.props;
     return (
       <div className={styles.wrapper}>
         <Slide
-          image={image}
-          title={title}
-          description={description}
+        slide={imageDB[currentSlide]}
           prevBtn={this.handlePrevSlide}
           nextBtn={this.handleNextSlide}
         />
@@ -62,4 +61,8 @@ class Carousel extends Component {
   }
 }
 
+
+Carousel.propTypes = {
+  imageDB:PropTypes.array
+}
 export default Carousel;

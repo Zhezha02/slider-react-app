@@ -39,8 +39,7 @@
   font-weight: inherit;
 }
 
-.btnPrev,
-.btnNext {
+%btn {
   width: var(--btn-length);
   height: var(--btn-length);
   border: none;
@@ -53,19 +52,19 @@
   border-radius: 50%;
 
   position: absolute;
-  top: calc(50% - var(--btn-length)/2);
+  top: calc(50% - var(--btn-length) / 2);
   opacity: 0.5;
-}
-.btnPrev:hover,
-.btnNext:hover {
-  opacity: 1;
+  &:hover{
+    opacity: 1;
+  }
 }
 
 .btnPrev {
+  @extend %btn;
   left: 25px;
 }
 
 .btnNext {
+  @extend %btn;
   right: 25px;
 }
-
