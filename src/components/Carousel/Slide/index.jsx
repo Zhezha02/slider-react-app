@@ -27,11 +27,13 @@ class Slide extends Component {
       nextBtn,
     } = this.props;
     const {isFullScreen} = this.state;
+    const{imgWrapper, fullScreen} = styles;
+    console.log(styles);
     return (
       <div>
-        <div className={classNames styles.imgWrapper, }>
+        <div className={imgWrapper}>
           <div className={styles.responsiveHelper}>
-            <img className={styles.image} src={image} alt={title} />
+            <img className={classNames(styles.image, {[fullScreen]: isFullScreen})} src={image} alt={title} />
             <button className={styles.btnPrev} onClick={prevBtn}>
               {'<'}
             </button>
@@ -62,3 +64,4 @@ Slide.propTypes = {
 };
 
 export default Slide;
+
