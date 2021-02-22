@@ -9,8 +9,12 @@ class Carousel extends Component {
     super(props);
     this.state = {
       currentSlide: 0,
-      intervalId: null,
+      timeOutId: null,
+      slideShowDelay: 1,
+      isImgLoad: false,
+      isSlideShow: false,
     };
+    this.timeOutId = null;
   }
   get nextIndex() {
     const { currentSlide } = this.state;
@@ -29,40 +33,74 @@ class Carousel extends Component {
     this.setState({ currentSlide: this.nextIndex });
   };
 
-  startSlideShow = (interval = 1) => {
-    const convertToMilliseconds = (seconds) => seconds * 1000;
-    this.setState({
-      intervalId: setInterval(this.handleNextSlide, convertToMilliseconds(interval)),
-    });
+  startSlideShow = (slideShowDelay) => {
+    const { isSlideShow } = this.state;
+    this.setState({ isSlideShow: !isSlideShow });
+    this.timeOutId = setTimeout(this.handleNextSlide, slideShowDelay * 1000);
   };
-
+  slideShowNext = () => {
+    const { slideShowDelay } = this.state;
+    clearTimeout(this.timeOutId);
+    this.timeOutId = setTimeout(() => {
+      this.setState(() => ({ isImgLoad: false }));
+      this.handleNextSlide();
+      // this.isImgLoad=false;
+    }, slideShowDelay * 1000);
+  };
   stopSlideShow = () => {
-    const { intervalId } = this.state;
-    clearInterval(intervalId);
-    this.setState({ intervalId: null });
+    const { isSlideShow } = this.state;
+    clearTimeout(this.timeOutId);
+    this.timeOutId = null;
+    this.setState({ isSlideShow: !isSlideShow });
+  };
+  imgLoad = () => {
+    console.log('before', this.state.isImgLoad);
+    this.setState({ isImgLoad: true });
+  };
+  changeSlideShowDelay = (newValue) => {
+    this.setState({ slideShowDelay: newValue });
   };
 
+  componentDidUpdate({}, { currentSlide: prevSlide }) {
+    const { isSlideShow, isImgLoad, currentSlide } = this.state;
+    console.log('isImgLoad/currentSlide', isImgLoad, this.state.currentSlide);
+    console.log(isImgLoad, isSlideShow);
+    console.log(isImgLoad && isSlideShow);
+    if ((prevSlide === currentSlide)&&(isSlideShow && isImgLoad)) {
+      this.slideShowNext();
+    }
+  }
   render() {
-    const { currentSlide, intervalId } = this.state;
+    const { currentSlide, slideShowDelay, isSlideShow } = this.state;
     const { imageDB } = this.props;
     return (
       <div className={styles.wrapper}>
         <Slide
-        slide={imageDB[currentSlide]}
+          slide={imageDB[currentSlide]}
           prevBtn={this.handlePrevSlide}
           nextBtn={this.handleNextSlide}
+          // slideShowNext={this.slideShowNext}
+          imgLoad={this.imgLoad}
+          isSlideShow={isSlideShow}
+          slideShowDelay={slideShowDelay}
+          isImgError={false}
         />
         <SlideShow
-          btnHandlers={[this.startSlideShow, this.stopSlideShow]}
-          intervalId={intervalId}
+          btnHandlers={[
+            this.startSlideShow,
+            this.stopSlideShow,
+            this.slideShowNext,
+          ]}
+          isSlideShow={isSlideShow}
+          slideShowDelay={slideShowDelay}
+          changeSlideShowDelay={this.changeSlideShowDelay}
         />
       </div>
     );
   }
 }
 
-
 Carousel.propTypes = {
-  imageDB:PropTypes.array
-}
+  imageDB: PropTypes.array,
+};
 export default Carousel;

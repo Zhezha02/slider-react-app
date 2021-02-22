@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Slide.module.scss';
 import PropTypes from 'prop-types';
-import { dbStructure } from '../DBStucture.js';
 import fullscreen from './fullscreen.svg';
 import fullscreenExit from './fullscreenExit.svg';
 
@@ -11,6 +10,7 @@ class Slide extends Component {
     super(props);
     this.state = {
       isFullScreen: false,
+      isImgError: this.props.isImgError,
     };
   }
   changeFullScreen = () => {
@@ -19,21 +19,46 @@ class Slide extends Component {
       isFullScreen: !isFullScreen,
     });
   };
-
+  loadHandler = () => {
+    const { isSlideShow, imgLoad } = this.props;
+    // const { delay } = this.state;
+    if (isSlideShow) {
+      imgLoad();
+    }
+    this.setState({ isImgError: false });
+    console.log('LOAD');
+  };
+  errorHandler = () => {
+    this.setState({ isImgError: true });
+    console.log('ERROR');
+  };
   render() {
+    console.log();
     const {
       slide: { image, title, description },
       prevBtn,
       nextBtn,
     } = this.props;
-    const {isFullScreen} = this.state;
-    const{imgWrapper, fullScreen} = styles;
-    console.log(styles);
+    const { isFullScreen, isImgError } = this.state;
+    const { imgWrapper, fullScreen } = styles;
     return (
       <div>
         <div className={imgWrapper}>
           <div className={styles.responsiveHelper}>
-            <img className={classNames(styles.image, {[fullScreen]: isFullScreen})} src={image} alt={title} />
+            {isImgError ? (
+              // <div className={styles.error}></div>
+              <div></div>
+            ) : (
+              <img
+                onLoad={this.loadHandler}
+                onError={this.errorHandler}
+                className={classNames(styles.image, {
+                  [fullScreen]: isFullScreen,
+                })}
+                src={image}
+                alt={title}
+              />
+            )}
             <button className={styles.btnPrev} onClick={prevBtn}>
               {'<'}
             </button>
@@ -57,11 +82,10 @@ class Slide extends Component {
   }
 }
 
-Slide.propTypes = {
-  slide: PropTypes.shape(dbStructure),
-  prevBtn: PropTypes.func,
-  nextBtn: PropTypes.func,
-};
+// Slide.propTypes = {
+//   slide: PropTypes.shape(dbStructure),
+//   prevBtn: PropTypes.func,
+//   nextBtn: PropTypes.func,
+// };
 
 export default Slide;
-
