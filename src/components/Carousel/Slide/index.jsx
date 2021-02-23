@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Slide.module.scss';
 import PropTypes from 'prop-types';
-import fullscreen from './fullscreen.svg';
-import fullscreenExit from './fullscreenExit.svg';
+// import fullscreen from './fullscreen.svg';
+// import fullscreenExit from './fullscreenExit.svg';
 
 class Slide extends Component {
   constructor (props) {
@@ -20,7 +20,6 @@ class Slide extends Component {
   };
   loadHandler = () => {
     const { isSlideShow, imgLoad } = this.props;
-    // const { delay } = this.state;
     if (isSlideShow) {
       imgLoad();
     }
@@ -57,14 +56,14 @@ class Slide extends Component {
         </div>
 
         <h1 className={styles.title}>{title}</h1>
-        <p>{description}</p>
-        <button onClick={this.changeFullScreen}>
+        <p className={styles.description}>{description}</p>
+        {/* <button onClick={this.changeFullScreen}>
           {isFullScreen ? (
             <img src={fullscreen} alt='fullscreen' />
           ) : (
             <img src={fullscreenExit} alt='fullscreen-exit' />
           )}
-        </button>
+        </button> */}
       </div>
     );
   }
