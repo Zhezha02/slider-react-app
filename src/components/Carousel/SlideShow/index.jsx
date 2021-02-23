@@ -4,11 +4,11 @@ import icon from './settings.svg';
 import styles from './SlideShow.module.scss';
 
 class SlideShow extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isVisibleSettings: false,
-      // delay: 3,
+      delay: null,
     };
   }
 
@@ -16,18 +16,23 @@ class SlideShow extends Component {
     const { isVisibleSettings } = this.state;
     this.setState({ isVisibleSettings: !isVisibleSettings });
   };
-  inputHandler = ({ target }) => {
-    const { changeSlideShowDelay } = this.props;
-    changeSlideShowDelay(target.value);
+  inputHandler = ({ target: { value } }) => {
+    if (/^\d+$/gm.test(value)) {
+      this.setState({ delay: value });
+    }
   };
-
-  render() {
+  submitHandler = e => {
+    e.preventDefault();
+    const { changeSlideShowDelay } = this.props;
+    const { delay } = this.state;
+    changeSlideShowDelay(delay);
+  };
+  render () {
     const {
       btnHandlers: [startSlideShow, stopSlideShow],
       isSlideShow,
-      slideShowDelay,
     } = this.props;
-    const { isVisibleSettings } = this.state;
+    const { isVisibleSettings, delay } = this.state;
     return (
       <>
         {isSlideShow ? (
@@ -39,25 +44,24 @@ class SlideShow extends Component {
           <img src={icon} alt='setting icon' />
         </button>
         {isVisibleSettings && (
-          <div>
+          <form onSubmit={this.submitHandler}>
             <label>
               SlideShow delay:
-              <input
-                type='text'
-                value={slideShowDelay}
-                onChange={this.inputHandler}
-              />
-              s
+              <input type='text' value={delay} onChange={this.inputHandler} />s
             </label>
-          </div>
+            <input type='submit' value='Change' />
+          </form>
         )}
       </>
     );
   }
 }
 
-// SlideShow.propTypes = {
-//   btnHandlers: PropTypes.arrayOf(PropTypes.func),
-//   timeOutId: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-// };
+SlideShow.propTypes = {
+  btnHandlers: PropTypes.arrayOf(PropTypes.func),
+  isSlideShow: PropTypes.bool,
+  changeDelay: PropTypes.func,
+};
 export default SlideShow;
+
+

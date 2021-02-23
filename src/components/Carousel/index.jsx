@@ -5,7 +5,7 @@ import SlideShow from './SlideShow';
 import PropTypes from 'prop-types';
 
 class Carousel extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       currentSlide: 0,
@@ -16,12 +16,12 @@ class Carousel extends Component {
     };
     this.timeOutId = null;
   }
-  get nextIndex() {
+  get nextIndex () {
     const { currentSlide } = this.state;
     const { imageDB } = this.props;
     return (currentSlide + 1) % imageDB.length;
   }
-  get prevIndex() {
+  get prevIndex () {
     const { currentSlide } = this.state;
     const { imageDB } = this.props;
     return (currentSlide - 1 + imageDB.length) % imageDB.length;
@@ -33,7 +33,7 @@ class Carousel extends Component {
     this.setState({ currentSlide: this.nextIndex });
   };
 
-  startSlideShow = (slideShowDelay) => {
+  startSlideShow = slideShowDelay => {
     const { isSlideShow } = this.state;
     this.setState({ isSlideShow: !isSlideShow });
     this.timeOutId = setTimeout(this.handleNextSlide, slideShowDelay * 1000);
@@ -57,20 +57,20 @@ class Carousel extends Component {
     console.log('before', this.state.isImgLoad);
     this.setState({ isImgLoad: true });
   };
-  changeSlideShowDelay = (newValue) => {
+  changeSlideShowDelay = newValue => {
     this.setState({ slideShowDelay: newValue });
   };
 
-  componentDidUpdate({}, { currentSlide: prevSlide }) {
+  componentDidUpdate ({}, { currentSlide: prevSlide }) {
     const { isSlideShow, isImgLoad, currentSlide } = this.state;
     console.log('isImgLoad/currentSlide', isImgLoad, this.state.currentSlide);
     console.log(isImgLoad, isSlideShow);
     console.log(isImgLoad && isSlideShow);
-    if ((prevSlide === currentSlide)&&(isSlideShow && isImgLoad)) {
+    if (prevSlide === currentSlide && isSlideShow && isImgLoad) {
       this.slideShowNext();
     }
   }
-  render() {
+  render () {
     const { currentSlide, slideShowDelay, isSlideShow } = this.state;
     const { imageDB } = this.props;
     return (
@@ -92,8 +92,7 @@ class Carousel extends Component {
             this.slideShowNext,
           ]}
           isSlideShow={isSlideShow}
-          slideShowDelay={slideShowDelay}
-          changeSlideShowDelay={this.changeSlideShowDelay}
+          changeDelay={this.changeSlideShowDelay}
         />
       </div>
     );
