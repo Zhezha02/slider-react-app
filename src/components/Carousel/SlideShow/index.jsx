@@ -23,9 +23,9 @@ class SlideShow extends Component {
   };
   submitHandler = e => {
     e.preventDefault();
-    const { changeSlideShowDelay } = this.props;
+    const { changeDelay } = this.props;
     const { delay } = this.state;
-    changeSlideShowDelay(delay);
+    changeDelay(delay);
   };
   render () {
     const {
@@ -34,25 +34,25 @@ class SlideShow extends Component {
     } = this.props;
     const { isVisibleSettings, delay } = this.state;
     return (
-      <>
-        {isSlideShow ? (
-          <button onClick={stopSlideShow}>Stop slideshow</button>
-        ) : (
-          <button onClick={startSlideShow}>Slideshow</button>
-        )}
-        <button onClick={this.changeVisible}>
-          <img src={icon} alt='setting icon' />
+      <div>
+        <button className={styles.settings} onClick={this.changeVisible}>
+          <img  src={icon} alt='setting icon' />
         </button>
+        {isSlideShow ? (
+          <button className={styles.btn} onClick={stopSlideShow}>Stop slideshow</button>
+        ) : (
+          <button className={styles.btn} onClick={startSlideShow}>Slideshow</button>
+        )}
         {isVisibleSettings && (
           <form onSubmit={this.submitHandler}>
             <label>
               SlideShow delay:
               <input type='text' value={delay} onChange={this.inputHandler} />s
             </label>
-            <input type='submit' value='Change' />
+            <input  type='submit' value='Change' />
           </form>
         )}
-      </>
+      </div>
     );
   }
 }

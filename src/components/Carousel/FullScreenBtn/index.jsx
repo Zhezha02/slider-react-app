@@ -1,12 +1,7 @@
 import React from 'react';
 
 const index = () => {
-  return (
-    <div>
-      import PropTypes from 'prop-types';
-
-    </div>
-  );
-}
+  return <div></div>;
+};
 
 export default index;
