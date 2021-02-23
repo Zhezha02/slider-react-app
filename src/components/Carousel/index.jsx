@@ -57,7 +57,7 @@ class Carousel extends Component {
     console.log('before', this.state.isImgLoad);
     this.setState({ isImgLoad: true });
   };
-  changeSlideShowDelay = newValue => {
+  changeDelay = newValue => {
     this.setState({ slideShowDelay: newValue });
   };
 
@@ -79,11 +79,9 @@ class Carousel extends Component {
           slide={imageDB[currentSlide]}
           prevBtn={this.handlePrevSlide}
           nextBtn={this.handleNextSlide}
-          // slideShowNext={this.slideShowNext}
           imgLoad={this.imgLoad}
           isSlideShow={isSlideShow}
           slideShowDelay={slideShowDelay}
-          isImgError={false}
         />
         <SlideShow
           btnHandlers={[
@@ -92,7 +90,7 @@ class Carousel extends Component {
             this.slideShowNext,
           ]}
           isSlideShow={isSlideShow}
-          changeDelay={this.changeSlideShowDelay}
+          changeDelay={this.changeDelay}
         />
       </div>
     );

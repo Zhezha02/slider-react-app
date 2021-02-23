@@ -6,11 +6,10 @@ import fullscreen from './fullscreen.svg';
 import fullscreenExit from './fullscreenExit.svg';
 
 class Slide extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       isFullScreen: false,
-      isImgError: this.props.isImgError,
     };
   }
   changeFullScreen = () => {
@@ -25,40 +24,29 @@ class Slide extends Component {
     if (isSlideShow) {
       imgLoad();
     }
-    this.setState({ isImgError: false });
-    console.log('LOAD');
   };
-  errorHandler = () => {
-    this.setState({ isImgError: true });
-    console.log('ERROR');
-  };
-  render() {
+
+  render () {
     console.log();
     const {
       slide: { image, title, description },
       prevBtn,
       nextBtn,
     } = this.props;
-    const { isFullScreen, isImgError } = this.state;
+    const { isFullScreen } = this.state;
     const { imgWrapper, fullScreen } = styles;
     return (
       <div>
         <div className={imgWrapper}>
           <div className={styles.responsiveHelper}>
-            {isImgError ? (
-              // <div className={styles.error}></div>
-              <div></div>
-            ) : (
-              <img
-                onLoad={this.loadHandler}
-                onError={this.errorHandler}
-                className={classNames(styles.image, {
-                  [fullScreen]: isFullScreen,
-                })}
-                src={image}
-                alt={title}
-              />
-            )}
+            <img
+              onLoad={this.loadHandler}
+              className={classNames(styles.image, {
+                [fullScreen]: isFullScreen,
+              })}
+              src={image}
+              alt={title}
+            />
             <button className={styles.btnPrev} onClick={prevBtn}>
               {'<'}
             </button>
@@ -82,10 +70,21 @@ class Slide extends Component {
   }
 }
 
-// Slide.propTypes = {
-//   slide: PropTypes.shape(dbStructure),
-//   prevBtn: PropTypes.func,
-//   nextBtn: PropTypes.func,
-// };
+Slide.propTypes = {
+  slide: PropTypes.shape({
+    image: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
+  prevBtn: PropTypes.func,
+  nextBtn: PropTypes.func,
+  imgLoad: PropTypes.func,
+  slideShowDelay: PropTypes.bool,
+  isSlideShow: PropTypes.bool,
+};
 
 export default Slide;
+
+/* <Slide
+isImgError={false}
+/> */
