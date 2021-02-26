@@ -34,7 +34,7 @@ class SlideShow extends Component {
     } = this.props;
     const { isVisibleSettings, delay } = this.state;
     return (
-      <div>
+      <div className={styles.container}>
         <button className={styles.settings} onClick={this.changeVisible}>
           <img  src={icon} alt='setting icon' />
         </button>

@@ -1,0 +1,21 @@
+.wrapper {
+  border: 1px solid black;
+  position: relative;
+}
+
+.settingsBtn {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border: none;
+  background-color: inherit;
+  outline: none;
+  cursor: pointer;
+}
+.settings{
+  
+}
+.countBtn{
+  background-color: black;
+  color: wheat;
+}

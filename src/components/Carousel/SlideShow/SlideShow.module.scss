@@ -12,6 +12,9 @@
 }
 
 .settings {
+  // position: absolute;
+  // left: 0;
+  // top: 0;
   background-color: inherit;
   outline: none;
   border: none;
@@ -27,4 +30,8 @@
   //   transform: rotate(180deg);
   // }
   // padding: 10px;
+}
+
+.container{
+  position: relative;
 }
