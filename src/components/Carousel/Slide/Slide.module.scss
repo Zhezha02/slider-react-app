@@ -85,9 +85,15 @@ $line-count: 3;
   right: 25px;
 }
 
-// .fullScreen {
-//   position: absolute;
-//   // top:0; bottom: 0; left: 0; right: 0;
-//   height: 100vh;
-//   width: 100vw;
-// }
+.fullScreenBtn {
+  position: absolute;
+  right: 1%;
+  bottom: 1%;
+  border: none;
+  background-color: inherit;
+  opacity: 70%;
+
+  &:hover{
+    opacity: 100%;
+  }
+}
