@@ -1,73 +1,68 @@
-import React, { Component } from 'react';
+import React, { useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Slide.module.scss';
 import PropTypes from 'prop-types';
-// import fullscreen from './fullscreen.svg';
-// import fullscreenExit from './fullscreenExit.svg';
+import fullscreen from './fullscreen.svg';
+import fullscreenExit from './fullscreenExit.svg';
 
-class Slide extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isFullScreen: false,
-    };
-  }
-  changeFullScreen = () => {
-    const { isFullScreen } = this.state;
-    this.setState({
-      isFullScreen: !isFullScreen,
-    });
-  };
-  loadHandler = () => {
-    const { isSlideShow, imgLoad } = this.props;
-    if (isSlideShow) {
-      imgLoad();
+const Slide = props => {
+  const {
+    imgLoad,
+    slide: { image, title, description },
+    prevBtn,
+    nextBtn,
+  } = props;
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const imageElem = useRef(null);
+
+  console.log(document.fullscreenEnabled);
+  console.log('isFullScreen', isFullScreen);
+  const ruleFullScreen = () => {
+    if (!isFullScreen) {
+      imageElem.current.requestFullscreen().catch(err => console.log(err));
+      setIsFullScreen(true);
+    } else {
+      document.exitFullscreen().catch(err => console.error(err));
+      setIsFullScreen(false);
     }
   };
 
-  render () {
-    console.log();
-    const {
-      slide: { image, title, description },
-      prevBtn,
-      nextBtn,
-    } = this.props;
-    const { isFullScreen } = this.state;
-    const { imgWrapper, fullScreen } = styles;
-    return (
-      <div>
-        <div className={imgWrapper}>
-          <div className={styles.responsiveHelper}>
-            <img
-              onLoad={this.loadHandler}
-              className={classNames(styles.image, {
-                [fullScreen]: isFullScreen,
-              })}
-              src={image}
-              alt={title}
-            />
-            <button className={styles.btnPrev} onClick={prevBtn}>
-              {'<'}
-            </button>
-            <button className={styles.btnNext} onClick={nextBtn}>
-              {'>'}
-            </button>
-          </div>
-        </div>
+  return (
+    <div>
+      <div className={styles.imgWrapper}>
+        <div
+          className={styles.responsiveHelper}
+          onDoubleClick={ruleFullScreen}
+          ref={imageElem}
+        >
+          <img
+            onLoad={imgLoad}
+            className={classNames(styles.image)}
+            src={image}
+            alt={title}
+          />
+          <button className={styles.btnPrev} onClick={prevBtn}>
+            {'<'}
+          </button>
+          <button className={styles.btnNext} onClick={nextBtn}>
+            {'>'}
+          </button>
 
-        <h1 className={styles.title}>{title}</h1>
-        <p className={styles.description}>{description}</p>
-        {/* <button onClick={this.changeFullScreen}>
-          {isFullScreen ? (
-            <img src={fullscreen} alt='fullscreen' />
-          ) : (
-            <img src={fullscreenExit} alt='fullscreen-exit' />
-          )}
-        </button> */}
+          <button className={styles.fullScreenBtn} onClick={ruleFullScreen}>
+            <img
+              src={isFullScreen ? fullscreenExit : fullscreen}
+              alt='fullscreen rule button'
+            />
+          </button>
+        </div>
       </div>
-    );
-  }
-}
+
+      <h1 className={styles.title}>{title}</h1>
+      <p className={styles.description}>{description}</p>
+    </div>
+  );
+};
 
 Slide.propTypes = {
   slide: PropTypes.shape({
@@ -78,12 +73,6 @@ Slide.propTypes = {
   prevBtn: PropTypes.func,
   nextBtn: PropTypes.func,
   imgLoad: PropTypes.func,
-  slideShowDelay: PropTypes.bool,
-  isSlideShow: PropTypes.bool,
 };
 
 export default Slide;
-
-/* <Slide
-isImgError={false}
-/> */
