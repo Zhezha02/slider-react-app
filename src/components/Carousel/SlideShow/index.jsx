@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import icon from './settings.svg';
 import styles from './SlideShow.module.scss';
+import cx from 'classnames';
 
 class SlideShow extends Component {
   constructor (props) {
     super(props);
     this.state = {
       isVisibleSettings: false,
-      delay: null,
+      delay: this.props.delay,
     };
   }
 
@@ -17,7 +18,7 @@ class SlideShow extends Component {
     this.setState({ isVisibleSettings: !isVisibleSettings });
   };
   inputHandler = ({ target: { value } }) => {
-    if (/^\d+$/gm.test(value)) {
+    if (/^\d*$/gm.test(value)) {
       this.setState({ delay: value });
     }
   };
@@ -27,41 +28,40 @@ class SlideShow extends Component {
     const { delay } = this.state;
     changeDelay(delay);
   };
+
   render () {
-    const {
-      btnHandlers: [startSlideShow, stopSlideShow],
-      isSlideShow,
-    } = this.props;
+    const { ruleSlideShow, isSlideShow } = this.props;
     const { isVisibleSettings, delay } = this.state;
+    const settings = cx(styles.settings, {
+      [styles.invisible]: !isVisibleSettings,
+    });
     return (
-      <div className={styles.container}>
-        <button className={styles.settings} onClick={this.changeVisible}>
-          <img  src={icon} alt='setting icon' />
-        </button>
-        {isSlideShow ? (
-          <button className={styles.btn} onClick={stopSlideShow}>Stop slideshow</button>
-        ) : (
-          <button className={styles.btn} onClick={startSlideShow}>Slideshow</button>
-        )}
-        {isVisibleSettings && (
-          <form onSubmit={this.submitHandler}>
-            <label>
-              SlideShow delay:
-              <input type='text' value={delay} onChange={this.inputHandler} />s
-            </label>
-            <input  type='submit' value='Change' />
-          </form>
-        )}
+      <div>
+        <div className={styles.container}>
+          <button className={styles.btn} onClick={ruleSlideShow}>
+            {isSlideShow ? 'Stop slideshow' : 'Slideshow'}
+          </button>
+          <button className={styles.btnSettings} onClick={this.changeVisible}>
+            <img src={icon} alt='setting icon' />
+          </button>
+        </div>
+
+        <form onSubmit={this.submitHandler} className={settings}>
+          <label>
+            SlideShow delay:
+            <input type='text' value={delay} onChange={this.inputHandler} />s
+          </label>
+          <input type='submit' value='Change' />
+        </form>
       </div>
     );
   }
 }
 
 SlideShow.propTypes = {
-  btnHandlers: PropTypes.arrayOf(PropTypes.func),
+  delay: PropTypes.number,
+  ruleSlideShow: PropTypes.func,
   isSlideShow: PropTypes.bool,
   changeDelay: PropTypes.func,
 };
 export default SlideShow;
-
-
